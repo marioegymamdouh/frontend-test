@@ -10,7 +10,7 @@ const generateStashpoint = (): Data.Stashpoint => {
     bagPerDayPrice: BigInt(faker.datatype.number({ min: 4, max: 7 })),
     currencyCode: 'GBP',
     id: faker.datatype.uuid(),
-    name: faker.name.title(),
+    name: faker.company.companyName(),
     rating: faker.datatype.number({ min: 0, max: 5, precision: 0.1 }),
   }
 }
