@@ -13,7 +13,7 @@ export const isBagCountValid = (bagCount: number): boolean => {
 
 export const isDateRangeValid = (dateRange: Data.DateRange): boolean => {
   const minDateFrom = addDays(startOfDay(new Date()), 1)
-  const minDateTo = addDays(minDateFrom, 1)
+  const minDateTo = addDays(dateRange.from, 1)
 
   return (
     isValidDate(dateRange.from) &&
