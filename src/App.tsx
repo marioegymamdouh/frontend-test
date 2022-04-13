@@ -1,14 +1,16 @@
 import StashPointsList from "./components/StashPointsList/StashPointsList";
-import {addDays, startOfDay} from "date-fns";
+import {addDays} from "date-fns";
 import {useState} from "react";
-import {DraftCart} from "./Data";
+import {DateRange, DraftCart} from "./Data";
+import DateRangePicker from "./components/DateRangePicker/DateRangePicker";
+import {initialDateFrom} from "./constants/date";
+import {isDateRangeValid} from "./util";
 
 export type AppProps = {
   readonly children?: never
 }
 
 const getInitialDraftCart = (): DraftCart => {
-  const initialDateFrom = addDays(startOfDay(new Date()), 1)
 
   return {
     bagCount: 1,
@@ -27,6 +29,15 @@ export const App = (_props: AppProps) => {
     }))
   };
 
+  const dateRangeChangeHandler = (dateRange: DateRange) => {
+    if (isDateRangeValid(dateRange)) {
+      setCart(oldState => ({
+        ...oldState,
+        dateRange: dateRange
+      }))
+    }
+  };
+
   return (
     <div>
       <header>
@@ -34,6 +45,11 @@ export const App = (_props: AppProps) => {
       </header>
 
       <main>
+        <DateRangePicker
+          dateRange={cart.dateRange}
+          changeHandler={dateRangeChangeHandler}
+        />
+
         <StashPointsList
           selectedStashPointId={cart.stashPointId}
           stashPointIdChangeHandler={stashPointIdChangeHandler}
