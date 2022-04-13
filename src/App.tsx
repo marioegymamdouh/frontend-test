@@ -4,7 +4,8 @@ import {useState} from "react";
 import {DateRange, DraftCart} from "./Data";
 import DateRangePicker from "./components/DateRangePicker/DateRangePicker";
 import {initialDateFrom} from "./constants/date";
-import {isDateRangeValid} from "./util";
+import {isBagCountValid, isDateRangeValid} from "./util";
+import IntSelector from "./components/IntSelector/IntSelector";
 
 export type AppProps = {
   readonly children?: never
@@ -28,7 +29,6 @@ export const App = (_props: AppProps) => {
       stashPointId: id
     }))
   };
-
   const dateRangeChangeHandler = (dateRange: DateRange) => {
     if (isDateRangeValid(dateRange)) {
       setCart(oldState => ({
@@ -37,6 +37,14 @@ export const App = (_props: AppProps) => {
       }))
     }
   };
+  const bagCountChangeHandler = (bagCount: number) => {
+    if (isBagCountValid(bagCount)) {
+      setCart(oldState => ({
+        ...oldState,
+        bagCount: bagCount
+      }))
+    }
+  }
 
   return (
     <div>
@@ -48,6 +56,12 @@ export const App = (_props: AppProps) => {
         <DateRangePicker
           dateRange={cart.dateRange}
           changeHandler={dateRangeChangeHandler}
+        />
+
+        <IntSelector
+          label={"Bag Count: "}
+          value={cart.bagCount}
+          changeHandler={bagCountChangeHandler}
         />
 
         <StashPointsList
