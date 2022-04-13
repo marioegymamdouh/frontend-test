@@ -1,6 +1,7 @@
 // Note: Ignore unsafe decoding of data
 
 import { DateRange, DateRangeEncoded } from './DateRange'
+import * as Data from "./index";
 
 export type Cart = {
   readonly bagCount: number
@@ -12,6 +13,12 @@ export type CartEncoded = {
   readonly bagCount: number
   readonly dateRange: DateRangeEncoded
   readonly stashpointId: string
+}
+
+export type DraftCart = {
+  readonly bagCount: number
+  readonly dateRange: Data.DateRange
+  readonly stashPointId: string | undefined
 }
 
 export const Cart = {

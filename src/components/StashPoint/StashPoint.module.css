@@ -1,0 +1,11 @@
+.stashPoint {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  border: 1px solid;
+  padding: 1rem;
+  cursor: pointer;
+}
+.selected {
+  background-color: #dadada;
+}
