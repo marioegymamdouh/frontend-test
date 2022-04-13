@@ -20,6 +20,13 @@ const getInitialDraftCart = (): DraftCart => {
 export const App = (_props: AppProps) => {
   const [cart, setCart] = useState<DraftCart>(getInitialDraftCart())
 
+  const stashPointIdChangeHandler = (id: DraftCart["stashPointId"]) => {
+    setCart(oldState => ({
+      ...oldState,
+      stashPointId: id
+    }))
+  };
+
   return (
     <div>
       <header>
@@ -28,8 +35,8 @@ export const App = (_props: AppProps) => {
 
       <main>
         <StashPointsList
-          cart={cart}
-          setCart={setCart}
+          selectedStashPointId={cart.stashPointId}
+          stashPointIdChangeHandler={stashPointIdChangeHandler}
         />
       </main>
     </div>

@@ -6,13 +6,13 @@ import styles from "./StashPointsList.module.css"
 import {DraftCart} from "../../Data";
 
 interface IStashPointsListProps {
-  cart: DraftCart,
-  setCart: React.Dispatch<React.SetStateAction<Data.DraftCart>>
+  selectedStashPointId: DraftCart["stashPointId"],
+  stashPointIdChangeHandler: (id: DraftCart["stashPointId"]) => void
 }
 
 const StashPointsList = ({
-  cart,
-  setCart
+  selectedStashPointId,
+  stashPointIdChangeHandler
 }: IStashPointsListProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [stashPoints, setStashPoints] = useState<Stashpoints>([]);
@@ -36,13 +36,6 @@ const StashPointsList = ({
     return stashPoints;
   };
 
-  const stashPointClickHandler = (id: DraftCart["stashPointId"]) => {
-    setCart(oldState => ({
-      ...oldState,
-      stashPointId: id
-    }))
-  };
-
   if (isLoading) return <div>Loading...</div>
 
   return (
@@ -53,8 +46,8 @@ const StashPointsList = ({
             <StashPoint
               key={stashPoint.id}
               stashPoint={stashPoint}
-              selected={cart.stashPointId === stashPoint.id}
-              clickHandler={() => stashPointClickHandler(stashPoint.id)}
+              selected={selectedStashPointId === stashPoint.id}
+              clickHandler={() => stashPointIdChangeHandler(stashPoint.id)}
             />
           )
         }
