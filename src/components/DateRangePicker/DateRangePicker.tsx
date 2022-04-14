@@ -1,7 +1,7 @@
-import styles from "./DateRangePicker.module.css";
-import {DateRange} from "../../Data";
-import {addDays, format, startOfDay} from "date-fns";
-import {initialDateFrom} from "../../constants/date";
+import styles from './DateRangePicker.module.css';
+import {DateRange} from '../../Data';
+import {addDays, format, startOfDay} from 'date-fns';
+import {initialDateFrom} from '../../constants/date';
 
 interface IDateRangePickerProps {
   dateRange: DateRange,
@@ -17,7 +17,7 @@ const DateRangePicker = ({
       <label>
         <span>from: </span>
         <input
-          type="date"
+          type='date'
           value={format(dateRange.from, 'yyyy-MM-dd')}
           min={format(initialDateFrom, 'yyyy-MM-dd')}
           max={format(addDays(dateRange.to, -1), 'yyyy-MM-dd')}
@@ -30,7 +30,7 @@ const DateRangePicker = ({
       <label>
         <span>to: </span>
         <input
-          type="date"
+          type='date'
           value={format(dateRange.to, 'yyyy-MM-dd')}
           min={format(addDays(dateRange.to, 1), 'yyyy-MM-dd')}
           onChange={e => changeHandler({

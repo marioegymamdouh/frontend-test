@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState} from 'react';
 import * as Data from './../../Data'
-import {Stashpoints} from "../../Data";
-import StashPoint from "../StashPoint/StashPoint";
-import styles from "./StashPointsList.module.css"
-import {DraftCart} from "../../Data";
+import {Stashpoints} from '../../Data';
+import StashPoint from '../StashPoint/StashPoint';
+import styles from './StashPointsList.module.css'
+import {DraftCart} from '../../Data';
 
 interface IStashPointsListProps {
-  selectedStashPointId: DraftCart["stashPointId"],
-  stashPointIdChangeHandler: (id: DraftCart["stashPointId"]) => void
+  selectedStashPointId: DraftCart['stashpointId'],
+  stashPointIdChangeHandler: (id: DraftCart['stashpointId']) => void
 }
 
 const StashPointsList = ({

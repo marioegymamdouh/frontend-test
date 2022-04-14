@@ -18,7 +18,7 @@ export type CartEncoded = {
 export type DraftCart = {
   readonly bagCount: number
   readonly dateRange: Data.DateRange
-  readonly stashPointId: string | undefined
+  readonly stashpointId: string | undefined
 }
 
 export const Cart = {

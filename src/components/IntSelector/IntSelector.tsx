@@ -1,4 +1,4 @@
-import styles from "./IntSelector.module.css";
+import styles from './IntSelector.module.css';
 
 interface IIntSelector {
   label: string,
@@ -15,10 +15,10 @@ const IntSelector = ({
     <label className={styles.intSelector}>
       {label}
       <input
-        type="number"
+        type='number'
         value={value}
         onChange={e => changeHandler(parseInt(e.target.value))} step={1}
-        onKeyDown={ (evt) => (evt.key === "e" || evt.key === ".") && evt.preventDefault() }
+        onKeyDown={ (evt) => (evt.key === 'e' || evt.key === '.') && evt.preventDefault() }
       />
     </label>
   )

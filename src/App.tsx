@@ -1,11 +1,12 @@
-import StashPointsList from "./components/StashPointsList/StashPointsList";
-import {addDays} from "date-fns";
-import {useState} from "react";
-import {DateRange, DraftCart} from "./Data";
-import DateRangePicker from "./components/DateRangePicker/DateRangePicker";
-import {initialDateFrom} from "./constants/date";
-import {isBagCountValid, isDateRangeValid} from "./util";
-import IntSelector from "./components/IntSelector/IntSelector";
+import StashPointsList from './components/StashPointsList/StashPointsList';
+import {addDays} from 'date-fns';
+import {useEffect, useState} from 'react';
+import {Cart, DateRange, DraftCart} from './Data';
+import DateRangePicker from './components/DateRangePicker/DateRangePicker';
+import {initialDateFrom} from './constants/date';
+import {isBagCountValid, isDateRangeValid} from './util';
+import IntSelector from './components/IntSelector/IntSelector';
+import * as Data from './Data'
 
 export type AppProps = {
   readonly children?: never
@@ -16,17 +17,27 @@ const getInitialDraftCart = (): DraftCart => {
   return {
     bagCount: 1,
     dateRange: { from: initialDateFrom, to: addDays(initialDateFrom, 1) },
-    stashPointId: undefined,
+    stashpointId: undefined,
   }
 }
 
 export const App = (_props: AppProps) => {
   const [cart, setCart] = useState<DraftCart>(getInitialDraftCart())
 
-  const stashPointIdChangeHandler = (id: DraftCart["stashPointId"]) => {
+  useEffect(() => {
+    if (
+      cart.bagCount && isBagCountValid(cart.bagCount) &&
+      cart.dateRange && isDateRangeValid(cart.dateRange) &&
+      cart.stashpointId
+    ) {
+      fetchPriceQuote(cart);
+    }
+  }, [cart])
+
+  const stashPointIdChangeHandler = (id: DraftCart['stashpointId']) => {
     setCart(oldState => ({
       ...oldState,
-      stashPointId: id
+      stashpointId: id
     }))
   };
   const dateRangeChangeHandler = (dateRange: DateRange) => {
@@ -44,7 +55,20 @@ export const App = (_props: AppProps) => {
         bagCount: bagCount
       }))
     }
-  }
+  };
+  const fetchPriceQuote = async (cart: Cart | DraftCart) => {
+    const response = await fetch('/api/quotes', {
+      method: 'POST',
+      headers: {
+        accept: 'application/json',
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(cart)
+    });
+    const formattedResponse = await response.json();
+    const [errors, priceQuote] = Data.PriceQuote.decode(formattedResponse);
+    console.log(priceQuote);
+  };
 
   return (
     <div>
@@ -59,13 +83,13 @@ export const App = (_props: AppProps) => {
         />
 
         <IntSelector
-          label={"Bag Count: "}
+          label={'Bag Count: '}
           value={cart.bagCount}
           changeHandler={bagCountChangeHandler}
         />
 
         <StashPointsList
-          selectedStashPointId={cart.stashPointId}
+          selectedStashPointId={cart.stashpointId}
           stashPointIdChangeHandler={stashPointIdChangeHandler}
         />
       </main>

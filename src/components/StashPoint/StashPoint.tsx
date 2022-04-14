@@ -1,5 +1,6 @@
-import {Stashpoint} from "../../Data";
-import styles from "./StashPoint.module.css";
+import {Stashpoint} from '../../Data';
+import styles from './StashPoint.module.css';
+import {getPriceString} from '../../util/getPriceString';
 
 interface IStashPointProps {
   stashPoint: Stashpoint,
@@ -32,7 +33,7 @@ const StashPoint = ({
       </span>
       <span>
         <strong>Bag Per Day Price: </strong>
-        {stashPoint.bagPerDayPrice.toString()}
+        {getPriceString(stashPoint)}
       </span>
       <span>
         <strong>Rating: </strong>
