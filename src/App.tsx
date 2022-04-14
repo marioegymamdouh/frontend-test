@@ -1,19 +1,19 @@
 import StashPointsList from './components/StashPointsList/StashPointsList';
 import {addDays} from 'date-fns';
 import {useEffect, useState} from 'react';
-import {Cart, DateRange, DraftCart} from './Data';
+import {Cart, DateRange, DraftCart, PriceQuote} from './Data';
 import DateRangePicker from './components/DateRangePicker/DateRangePicker';
 import {initialDateFrom} from './constants/date';
 import {isBagCountValid, isDateRangeValid} from './util';
 import IntSelector from './components/IntSelector/IntSelector';
 import * as Data from './Data'
+import PriceQuoteCTA from "./components/PriceQuoteCTA/PriceQuoteCTA";
 
 export type AppProps = {
   readonly children?: never
 }
 
 const getInitialDraftCart = (): DraftCart => {
-
   return {
     bagCount: 1,
     dateRange: { from: initialDateFrom, to: addDays(initialDateFrom, 1) },
@@ -22,7 +22,9 @@ const getInitialDraftCart = (): DraftCart => {
 }
 
 export const App = (_props: AppProps) => {
-  const [cart, setCart] = useState<DraftCart>(getInitialDraftCart())
+  const [cart, setCart] = useState<DraftCart>(getInitialDraftCart());
+  const [priceQuote, setPriceQuote] = useState<PriceQuote>();
+  const [isPriceQuoteLoading, setIsPriceQuoteLoading] = useState(false);
 
   useEffect(() => {
     if (
@@ -30,7 +32,9 @@ export const App = (_props: AppProps) => {
       cart.dateRange && isDateRangeValid(cart.dateRange) &&
       cart.stashpointId
     ) {
-      fetchPriceQuote(cart);
+      fetchPriceQuote(cart).then((priceQuote: PriceQuote | undefined) => {
+        if (priceQuote) setPriceQuote(priceQuote)
+      });
     }
   }, [cart])
 
@@ -57,6 +61,7 @@ export const App = (_props: AppProps) => {
     }
   };
   const fetchPriceQuote = async (cart: Cart | DraftCart) => {
+    setIsPriceQuoteLoading(true);
     const response = await fetch('/api/quotes', {
       method: 'POST',
       headers: {
@@ -67,7 +72,12 @@ export const App = (_props: AppProps) => {
     });
     const formattedResponse = await response.json();
     const [errors, priceQuote] = Data.PriceQuote.decode(formattedResponse);
-    console.log(priceQuote);
+    setIsPriceQuoteLoading(false);
+    if (errors) {
+      alert(errors);
+      return undefined;
+    }
+    return priceQuote;
   };
 
   return (
@@ -86,6 +96,11 @@ export const App = (_props: AppProps) => {
           label={'Bag Count: '}
           value={cart.bagCount}
           changeHandler={bagCountChangeHandler}
+        />
+
+        <PriceQuoteCTA
+          priceQuote={priceQuote}
+          isLoading={isPriceQuoteLoading}
         />
 
         <StashPointsList

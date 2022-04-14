@@ -1,6 +1,6 @@
 import styles from './IntSelector.module.css';
 
-interface IIntSelector {
+interface IIntSelectorProps {
   label: string,
   value: number,
   changeHandler: (newValue: number) => void
@@ -10,7 +10,7 @@ const IntSelector = ({
   label,
   value,
   changeHandler
-}: IIntSelector) => {
+}: IIntSelectorProps) => {
   return (
     <label className={styles.intSelector}>
       {label}

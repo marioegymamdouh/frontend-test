@@ -4,6 +4,7 @@ import {Stashpoints} from '../../Data';
 import StashPoint from '../StashPoint/StashPoint';
 import styles from './StashPointsList.module.css'
 import {DraftCart} from '../../Data';
+import Loading from "../Loading/Loading";
 
 interface IStashPointsListProps {
   selectedStashPointId: DraftCart['stashpointId'],
@@ -18,17 +19,17 @@ const StashPointsList = ({
   const [stashPoints, setStashPoints] = useState<Stashpoints>([]);
 
   useEffect(() => {
-    fetchStashPoints().then((stashPoints) => {
+    fetchStashPoints().then((stashPoints: Stashpoints) => {
       setStashPoints(stashPoints);
-      setIsLoading(false);
     })
   }, []);
 
-  const fetchStashPoints = async () => {
+  const fetchStashPoints = async (): Promise<Stashpoints> => {
     setIsLoading(true);
     const response = await fetch('/api/stashpoints');
     const formattedResponse = await response.json();
     const [errors, stashPoints] = Data.Stashpoints.decode(formattedResponse);
+    setIsLoading(false);
     if (errors) {
       alert(errors);
       return [];
@@ -36,7 +37,7 @@ const StashPointsList = ({
     return stashPoints;
   };
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading) return <Loading />
 
   return (
     <div>
