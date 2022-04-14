@@ -1,6 +1,6 @@
 import {Stashpoint} from '../Data';
-import * as Data from './../Data'
+import {defaultLocale} from "../constants/locales";
 
 export const getPriceString = (entity: Stashpoint) => {
-  return `${Data.Price.encode(entity.bagPerDayPrice)} ${entity.currencyCode}`
+  return new Intl.NumberFormat(defaultLocale, { style: 'currency', currency: entity.currencyCode }).format(entity.bagPerDayPrice)
 }
